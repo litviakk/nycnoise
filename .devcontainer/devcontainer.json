@@ -8,7 +8,14 @@
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	"features": {
-		"ghcr.io/itsmechlark/features/postgresql:1": {},
+		"ghcr.io/itsmechlark/features/postgresql:1": {},	
+		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},
+		"ghcr.io/localstack/devcontainer-feature/localstack-cli": {
+			"tflocal": true,
+			"awslocal": true
+		},
+		"ghcr.io/devcontainers/features/terraform:1":{},
+		"aws-cli": "latest"
 	},
 	
 	// "runArgs": ["--add-host=host.docker.internal:host-gateway"],
@@ -16,6 +23,16 @@
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// This can be used to network with other containers or the host.
 	"forwardPorts": [5432, 8000],
+	
+	"mounts": [
+            "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached",
+			"source=${localEnv:HOME}${localEnv:USERPROFILE}/.aws,target=/home/vscode/.aws,type=bind",
+			"source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+        ],
+		
+	"remoteEnv": {
+		"TERRAGRUNT_DOWNLOAD": "${containerWorkspaceFolder}/.terragrunt-cache"
+	}
 
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "pip install --user -r requirements.txt",
